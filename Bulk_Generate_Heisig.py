@@ -5,12 +5,11 @@ Addon to add Heisig translation from another Deck to specified fields
 
 License: The MIT License (MIT)
 """
-
 searchString = u"deck:@Nihongo::Heisig　-tag:HeisigPrimitive kanji:*{0}*"
 heisigfieldname = 'KeyDE'
 heisigOutputFormatString = u".{0}."
 
-Vocab_SrcField = 'Japanese'
+Vocab_SrcFields = ['Japanese', 'Expression']
 #Vocab_SrcField2 = 'Kana'
 dstField = 'Heisig'
 
@@ -133,7 +132,14 @@ def onBulkGenerateHeisig(browser):
     for nid in nids:
         note = mw.col.getNote(nid)
         src = None
-        if Vocab_SrcField in note:
+#        Vocab_SrcField = 'Japanese'
+        for field in Vocab_SrcFields :
+            if field in note:
+                Vocab_SrcField = field
+                break
+        #showInfo ("--> Field %s Vocab_SrcField!" % (Vocab_SrcField))
+
+        if Vocab_SrcField:
             src = stripFormatting(note[Vocab_SrcField])
         if dstField not in note:
             #showInfo ("--> Field %s not found!" % (dstField))
